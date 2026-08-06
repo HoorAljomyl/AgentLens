@@ -1,6 +1,10 @@
 from dataclasses import dataclass
 import random
-
+from synthetic_users.personas import (
+    ANGRY_CUSTOMER,
+    RUSHED_CUSTOMER,
+    CONFUSED_CUSTOMER,
+)
 
 @dataclass
 class SyntheticUser:
@@ -9,24 +13,18 @@ class SyntheticUser:
     goal: str
 
 
-PERSONALITIES = [
-    "Calm",
-    "Angry",
-    "Confused",
-    "Impatient",
-]
-
-GOALS = [
-    "Book Appointment",
-    "Cancel Appointment",
-    "Reschedule Appointment",
-    "Ask About Services",
+PERSONAS = [
+    ANGRY_CUSTOMER,
+    RUSHED_CUSTOMER,
+    CONFUSED_CUSTOMER,
 ]
 
 
 def generate_user():
+    persona = random.choice(PERSONAS)
+
     return SyntheticUser(
-        name=f"User-{random.randint(1000,9999)}",
-        personality=random.choice(PERSONALITIES),
-        goal=random.choice(GOALS),
+        name=persona["name"],
+        personality=persona["personality"],
+        goal=persona["goal"],
     )

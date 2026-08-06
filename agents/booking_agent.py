@@ -1,34 +1,17 @@
-def generate_agent_response(message: str) -> str:
-    """
-    Generate a simple response based on the user's message.
+def respond(message: str) -> str:
+    message = message.lower()
 
-    This is a rule-based agent. It does not use an LLM yet.
-    """
-
-    normalized_message = message.lower().strip()
-
-    if not normalized_message:
-        return "Please enter a message."
-
-    if "book" in normalized_message:
+    if "book" in message:
         return "Sure. What date and time would you prefer?"
 
-    if "cancel" in normalized_message:
-        return "I can help you cancel. Please provide your booking number."
+    elif "cancel" in message:
+        return "I can help cancel your appointment. What is your booking ID?"
 
-    if "reschedule" in normalized_message or "change" in normalized_message:
-        return "I can help you reschedule. What is your booking number?"
+    elif "reschedule" in message:
+        return "No problem. Which appointment would you like to reschedule?"
 
-    if "service" in normalized_message:
-        return (
-            "We currently support booking, cancellation, "
-            "and appointment rescheduling."
-        )
+    elif "service" in message:
+        return "We currently offer consultation, follow-up, and dental services."
 
-    if "hello" in normalized_message or "hi" in normalized_message:
-        return "Hello! How can I help you with your appointment?"
-
-    return (
-        "I did not fully understand your request. "
-        "Would you like to book, cancel, or reschedule an appointment?"
-    )
+    else:
+        return "Could you please clarify your request?"

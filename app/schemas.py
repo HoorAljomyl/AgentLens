@@ -1,5 +1,5 @@
+from typing import List
 from pydantic import BaseModel, Field
-
 
 class AgentRunRequest(BaseModel):
     name: str = Field(
@@ -43,8 +43,24 @@ class AgentMessageRequest(BaseModel):
         max_length=1000,
         description="Message sent to the booking agent.",
     )
-
-
 class AgentMessageResponse(BaseModel):
     agent: str
     response: str
+
+
+class SimulationResult(BaseModel):
+    user: str
+    personality: str
+    message: str
+    response: str
+    passed: bool
+    score: int
+    reason: str
+
+
+class SimulationResponse(BaseModel):
+    total_users: int
+    passed_tests: int
+    failed_tests: int
+    average_score: float
+    results: List[SimulationResult]

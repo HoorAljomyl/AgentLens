@@ -1,5 +1,7 @@
 from uuid import uuid4
-
+from evaluation.conversation import simulate_conversation
+from evaluation.evaluator import evaluate_response
+from synthetic_users.generator import generate_user
 from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
 
@@ -7,12 +9,13 @@ from app.schemas import (
     AgentMessageRequest,
     AgentMessageResponse,
     AgentRunRequest,
+    SimulationResponse,
     TestCreatedResponse,
     TestDetailsResponse,
 )
 from database.connection import Base, engine, get_db
 from database.models import TestRecord
-from agents.booking_agent import generate_agent_response
+from agents.booking_agent import respond
 from synthetic_users.generator import generate_user
 
 Base.metadata.create_all(bind=engine)
@@ -21,7 +24,7 @@ Base.metadata.create_all(bind=engine)
 app = FastAPI(
     title="AgentLens API",
     description="API for testing and evaluating AI agents.",
-    version="0.6.0",
+    version="0.7.0",
 )
 
 
@@ -103,9 +106,44 @@ def create_synthetic_user():
     }
 @app.post("/agent/respond", response_model=AgentMessageResponse)
 def respond_to_message(request: AgentMessageRequest):
-    response = generate_agent_response(request.message)
+    response = respond(request.message)
 
     return {
         "agent": "Booking Assistant",
         "response": response,
+    }
+@app.get("/simulate", response_model=SimulationResponse)
+def simulate():
+    results = []
+
+    for _ in range(5):
+        user = generate_user()
+        conversation = simulate_conversation(user)
+
+        evaluation = evaluate_response(
+            message=conversation["message"],
+            response=conversation["response"],
+        )
+
+        conversation.update(evaluation)
+        results.append(conversation)
+
+    passed_tests = sum(
+        1 for result in results if result["passed"]
+    )
+
+    failed_tests = len(results) - passed_tests
+
+    average_score = round(
+        sum(result["score"] for result in results)
+        / len(results),
+        2,
+    )
+
+    return {
+        "total_users": len(results),
+        "passed_tests": passed_tests,
+        "failed_tests": failed_tests,
+        "average_score": average_score,
+        "results": results,
     }

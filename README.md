@@ -9,6 +9,10 @@ AI Agent Evaluation & Debugging Platform
 - Retrieve Test Results
 - Generate Synthetic Users
 - Booking Agent API
+- Rule-based conversation evaluation
+- Pass/fail classification
+- Conversation scoring
+- Batch evaluation metrics
 
 ## Tech Stack
 
@@ -35,3 +39,4 @@ POST /agent/respond
 ## Status
 
 Week 1 Completed ✅
+Day 11 Completed ✅
