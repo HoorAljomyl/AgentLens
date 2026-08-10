@@ -56,8 +56,8 @@ class SimulationResult(BaseModel):
     passed: bool
     score: int
     reason: str
-
-
+    recommendation: str
+    failure_type: str
 class SimulationResponse(BaseModel):
     total_users: int
     passed_tests: int

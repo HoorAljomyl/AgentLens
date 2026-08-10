@@ -1,0 +1,50 @@
+=============================
+AgentLens Evaluation Report
+=============================
+
+Total Users: 5
+Passed Tests: 5
+Failed Tests: 0
+Average Score: 100.0%
+
+---------------------------------
+User: Mohammed
+Personality: Confused
+Message: Ask About Services
+Response: We currently offer consultation, follow-up, and dental services.
+Score: 100
+Status: PASSED
+Reason: The response contains the expected information.
+---------------------------------
+User: Mohammed
+Personality: Confused
+Message: Ask About Services
+Response: We currently offer consultation, follow-up, and dental services.
+Score: 100
+Status: PASSED
+Reason: The response contains the expected information.
+---------------------------------
+User: Sara
+Personality: In a Hurry
+Message: Book Appointment Quickly
+Response: Sure. What date and time would you prefer?
+Score: 100
+Status: PASSED
+Reason: The response contains the expected information.
+---------------------------------
+User: Mohammed
+Personality: Confused
+Message: Ask About Services
+Response: We currently offer consultation, follow-up, and dental services.
+Score: 100
+Status: PASSED
+Reason: The response contains the expected information.
+---------------------------------
+User: Sara
+Personality: In a Hurry
+Message: Book Appointment Quickly
+Response: Sure. What date and time would you prefer?
+Score: 100
+Status: PASSED
+Reason: The response contains the expected information.
+---------------------------------

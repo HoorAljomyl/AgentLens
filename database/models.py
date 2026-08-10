@@ -1,4 +1,13 @@
-from sqlalchemy import Column, Integer, String, Text
+from datetime import datetime
+
+from sqlalchemy import (
+    Column,
+    Integer,
+    String,
+    Text,
+    Float,
+    DateTime,
+)
 
 from database.connection import Base
 
@@ -12,3 +21,35 @@ class TestRecord(Base):
     name = Column(String, nullable=False)
     prompt = Column(Text, nullable=False)
     conversation_count = Column(Integer, nullable=False)
+
+
+class EvaluationReport(Base):
+    __tablename__ = "evaluation_reports"
+
+    id = Column(Integer, primary_key=True, index=True)
+
+    created_at = Column(
+        DateTime,
+        default=datetime.utcnow,
+        nullable=False,
+    )
+
+    total_tests = Column(
+        Integer,
+        nullable=False,
+    )
+
+    passed_tests = Column(
+        Integer,
+        nullable=False,
+    )
+
+    failed_tests = Column(
+        Integer,
+        nullable=False,
+    )
+
+    average_score = Column(
+        Float,
+        nullable=False,
+    )
