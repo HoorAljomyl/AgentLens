@@ -9,12 +9,17 @@ def generate_recommendation(
 
     if passed:
         return {
-            "recommendation":
-                "No improvement needed."
+            "recommendation": "No improvement needed."
         }
 
     message = message.lower()
     response = response.lower()
+
+    if "pricing" in message or "price" in message:
+        return {
+            "recommendation":
+                "Add pricing support or clearly explain that pricing information is not available."
+        }
 
     if "book" in message:
         return {
@@ -34,7 +39,7 @@ def generate_recommendation(
                 "Ask which appointment should be rescheduled."
         }
 
-    if "services" in message:
+    if "service" in message:
         return {
             "recommendation":
                 "Provide a complete list of available services."

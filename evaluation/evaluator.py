@@ -23,6 +23,12 @@ def evaluate_response(message: str, response: str) -> Dict:
             "dental",
         ]
 
+    elif "pricing" in normalized_message or "price" in normalized_message:
+        expected_keywords = [
+            "price",
+            "cost",
+        ]
+
     else:
         expected_keywords = ["clarify"]
 
@@ -40,8 +46,10 @@ def evaluate_response(message: str, response: str) -> Dict:
 
     if passed:
         reason = "The response contains the expected information."
+
     elif score > 0:
         reason = "The response contains only part of the expected information."
+
     else:
         reason = "The response does not contain the expected information."
 

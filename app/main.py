@@ -5,6 +5,12 @@ from fastapi.responses import PlainTextResponse
 from sqlalchemy.orm import Session
 from evaluation.recommendations import generate_recommendation
 from evaluation.failure_classifier import classify_failure
+from evaluation.llm_judge import judge_response
+from evaluation.metrics import calculate_metrics
+from app.tracing.tracer import (
+    create_trace,
+    add_step,
+)
 from app.schemas import (
     AgentMessageRequest,
     AgentMessageResponse,
@@ -127,13 +133,41 @@ def simulate():
     results = []
 
     for _ in range(5):
+        trace = create_trace()
+
         user = generate_user()
 
+        add_step(
+            trace,
+            "Synthetic User",
+            {
+                "user": user.name,
+                "personality": user.personality,
+                "goal": user.goal,
+            },
+        )
+
         conversation = simulate_conversation(user)
+
+        add_step(
+            trace,
+            "Conversation",
+            {
+                "user": conversation["user"],
+                "message": conversation["message"],
+                "response": conversation["response"],
+            },
+        )
 
         evaluation = evaluate_response(
             message=conversation["message"],
             response=conversation["response"],
+        )
+
+        add_step(
+            trace,
+            "Evaluation",
+            evaluation,
         )
 
         conversation.update(evaluation)
@@ -145,7 +179,11 @@ def simulate():
         )
 
         conversation.update(failure)
-
+        add_step(
+        trace,
+       "Failure Classification",
+       failure,
+      )
         recommendation = generate_recommendation(
             message=conversation["message"],
             response=conversation["response"],
@@ -153,6 +191,27 @@ def simulate():
         )
 
         conversation.update(recommendation)
+
+        add_step(
+            trace,
+            "Recommendation",
+            recommendation,
+        )
+
+        llm_judgment = judge_response(
+            message=conversation["message"],
+            response=conversation["response"],
+        )
+
+        conversation["llm_judgment"] = llm_judgment
+        add_step(
+    trace,
+    "LLM Judge",
+    {
+        "judgment": llm_judgment,
+    },
+)
+        conversation["trace"] = trace
 
         results.append(conversation)
 
@@ -270,3 +329,24 @@ def get_report_history(
         }
         for report in reports
     ]
+@app.get("/metrics")
+def metrics():
+
+    results = []
+
+    for _ in range(10):
+
+        user = generate_user()
+
+        conversation = simulate_conversation(user)
+
+        evaluation = evaluate_response(
+            message=conversation["message"],
+            response=conversation["response"],
+        )
+
+        conversation.update(evaluation)
+
+        results.append(conversation)
+
+    return calculate_metrics(results)

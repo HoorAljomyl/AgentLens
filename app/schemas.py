@@ -58,6 +58,8 @@ class SimulationResult(BaseModel):
     reason: str
     recommendation: str
     failure_type: str
+    llm_judgment: str
+    trace: dict
 class SimulationResponse(BaseModel):
     total_users: int
     passed_tests: int

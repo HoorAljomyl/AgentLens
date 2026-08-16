@@ -15,6 +15,11 @@ def classify_failure(
     message = message.lower()
     response = response.lower()
 
+    if "pricing" in message or "price" in message:
+        return {
+            "failure_type": "Unsupported Intent"
+        }
+
     if "book" in message:
         if "date" not in response or "time" not in response:
             return {

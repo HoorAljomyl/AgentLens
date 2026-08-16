@@ -1,10 +1,15 @@
 from dataclasses import dataclass
 import random
+
 from synthetic_users.personas import (
     ANGRY_CUSTOMER,
     RUSHED_CUSTOMER,
     CONFUSED_CUSTOMER,
+    CANCEL_CUSTOMER,
+    UNCLEAR_CUSTOMER,
+    PRICING_CUSTOMER,
 )
+
 
 @dataclass
 class SyntheticUser:
@@ -17,6 +22,10 @@ PERSONAS = [
     ANGRY_CUSTOMER,
     RUSHED_CUSTOMER,
     CONFUSED_CUSTOMER,
+    CANCEL_CUSTOMER,
+    UNCLEAR_CUSTOMER,
+    PRICING_CUSTOMER
+
 ]
 
 
