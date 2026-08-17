@@ -129,6 +129,11 @@ if st.button("Run Evaluation"):
         )
 
         if not filtered_df.empty:
+
+            # =========================
+            # Scores by User
+            # =========================
+
             score_fig = px.bar(
                 filtered_df,
                 x="user",
@@ -150,28 +155,42 @@ if st.button("Run Evaluation"):
                 use_container_width=True,
             )
 
-            failure_data = (
-                filtered_df["failure_type"]
-                .value_counts()
-                .reset_index()
-            )
+            # =========================
+            # Failure Types
+            # =========================
 
-            failure_data.columns = [
-                "Failure Type",
-                "Count",
+            failure_only_df = filtered_df[
+                filtered_df["failure_type"] != "None"
             ]
 
-            failure_fig = px.bar(
-                failure_data,
-                x="Failure Type",
-                y="Count",
-                title="Failure Types",
-            )
+            if not failure_only_df.empty:
+                failure_data = (
+                    failure_only_df["failure_type"]
+                    .value_counts()
+                    .reset_index()
+                )
 
-            st.plotly_chart(
-                failure_fig,
-                use_container_width=True,
-            )
+                failure_data.columns = [
+                    "Failure Type",
+                    "Count",
+                ]
+
+                failure_fig = px.bar(
+                    failure_data,
+                    x="Failure Type",
+                    y="Count",
+                    title="Failure Types",
+                )
+
+                st.plotly_chart(
+                    failure_fig,
+                    use_container_width=True,
+                )
+
+            else:
+                st.info(
+                    "No failures detected in this evaluation run."
+                )
 
         else:
             st.warning(
@@ -260,6 +279,10 @@ if st.button("Run Evaluation"):
                     "**LLM Judgment:**",
                     result["llm_judgment"],
                 )
+
+                # =========================
+                # Trace
+                # =========================
 
                 st.markdown("### Trace")
 
